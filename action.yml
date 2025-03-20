@@ -52,5 +52,5 @@ outputs:
 
 runs:
   using: 'node20'
-  main: 'src/install.js'
+  main: 'src/launch.js'
   post: 'src/cleanup.js'
