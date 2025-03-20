@@ -40,17 +40,6 @@ try {
     execSync(spawnCmd, { stdio: 'inherit' });
 
     // get VM IP
-
-    var ip = execSync(getIpCmd, { stdio: 'pipe' }).toString()
-    for (const line of ip.split(os.EOL)) {
-        if (line.trim() !== "") {
-            let temp = extractIP(line.trim());
-            if (temp !== "") {
-                ip = temp;
-                break;
-            }
-        }
-    }
     var ip = getIP(30);
     setOutput('incus_vm_ip', ip);
     console.log(`VM IP: ${ip}`);
