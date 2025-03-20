@@ -59,8 +59,6 @@ function extractIP(output) {
                 console.log(`line includes IP: ${trimLine}`);
                 trimLine=trimLine.split(":")[1];
                 console.log(`extracted IP: ${trimLine}`);
-                trimLine = trimLine.split(":")[1];
-                console.log(`extracted IP: ${trimLine}`);
                 trimLine = trimLine.split("/")[0].trim();
                 console.log(`extracted IP: ${trimLine}`);
                 return trimLine;
