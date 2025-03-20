@@ -79,7 +79,7 @@ function getIP(incusRemote, vmName, incusProject, maxRetries) {
         if (retry === retries) {
             throw new Error("Failed to get IP address");
         }
-        sleep(4000);
+        execSync("sleep 4", { stdio: 'inherit' });
     }
     return ip;
 }
