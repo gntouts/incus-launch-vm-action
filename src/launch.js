@@ -27,7 +27,7 @@ try {
     // spawn new VM
     var spawnCmd = `sudo incus launch `;
     spawnCmd += `${incusRemote}:${incusImage} `;
-    spawnCmd += `${incusProject}:${vmName} `;
+    spawnCmd += `${incusRemote}:${vmName} `;
     spawnCmd += `--project ${incusProject} `;
     spawnCmd += `--profile ${incusProfile} `;
     spawnCmd += `--description "${vmDescription}" `;
