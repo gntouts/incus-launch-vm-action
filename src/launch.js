@@ -40,7 +40,7 @@ try {
     execSync(spawnCmd, { stdio: 'inherit' });
 
     // get VM IP
-    var ip = getIP(30);
+    var ip = getIP(incusRemote, vmName, incusProject, 30);
     setOutput('incus_vm_ip', ip);
     console.log(`VM IP: ${ip}`);
 } catch (error) {
@@ -65,7 +65,7 @@ function extractIP(output) {
     return "";
 }
 
-function getIP(maxRetries) {
+function getIP(incusRemote, vmName, incusProject, maxRetries) {
     const retries = maxRetries;
     var retry = 0;
     var ip = "";
