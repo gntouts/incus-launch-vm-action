@@ -48,17 +48,13 @@ try {
 }
 
 function extractIP(output) {
-    console.log(`received output: ${output}`);
     for (const line of output.split(os.EOL)) {
         let trimLine = line.trim();
         trimLine = trimLine.toString()
         trimLine = `${trimLine}`;
         if (trimLine !== "") {
-            console.log(`non empty trimmed line: ${trimLine}`);
             if (trimLine.includes("inet") && trimLine.includes("global")) {
-                console.log(`line includes IP: ${trimLine}`);
                 trimLine=trimLine.split(":")[1];
-                console.log(`extracted IP: ${trimLine}`);
                 trimLine = trimLine.split("/")[0].trim();
                 console.log(`extracted IP: ${trimLine}`);
                 return trimLine;
@@ -74,10 +70,12 @@ function getIP(incusRemote, vmName, incusProject, maxRetries) {
     var ip = "";
     var getIpCmd = `sudo incus info ${incusRemote}:${vmName} --project ${incusProject} `;
     console.log(`getIpCmd: ${getIpCmd}`);
-    while (ip === "") {
-        console.log("Waiting for VM to be ready...");
+    while (true) {
         ip = execSync(getIpCmd, { stdio: 'pipe' }).toString();
         ip = extractIP(ip);
+        if (ip !== "") {
+            break;
+        }
         retry++;
         if (retry === retries) {
             throw new Error("Failed to get IP address");
