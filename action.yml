@@ -6,6 +6,12 @@ branding:
   color: 'blue'
 
 inputs:
+  vm_name:
+    description: 'Name of the VM'
+    required: true
+  vm_description:
+    description: 'Description of the VM'
+    required: false
   incus_remote:
     description: 'Name of the Incus remote'
     required: true
@@ -43,8 +49,6 @@ inputs:
     default: 'false'
 
 outputs:
-  incus_vm_id:
-    description: 'ID of the launched Incus VM'
   incus_vm_ip:
     description: 'IP address of the launched Incus VM'
   snapshot_id:
