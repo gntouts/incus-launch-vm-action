@@ -14,6 +14,11 @@ try {
     console.log(`cleanup: ${cleanUp}`);
     console.log(`snapshot: ${snapshot}`);
 
+    console.log("Stopping VM");
+    var stopCmd = `sudo incus stop ${incusRemote}:${vmName} --project ${incusProject}`;
+    console.log(`stopCmd: ${stopCmd}`);
+    execSync(stopCmd, { stdio: 'inherit' });
+
     if (snapshot === "true") {
         console.log("Snapshotting VM");
         var snapshotCmd = `sudo incus snapshot create ${incusRemote}:${vmName} ${vmName}-snapshot --reuse --no-expiry --project ${incusProject}`;
@@ -27,11 +32,6 @@ try {
         var cleanUpCmd = `sudo incus delete ${incusRemote}:${vmName} --force --project ${incusProject}`;
         console.log(`cleanUpCmd: ${cleanUpCmd}`);
         execSync(cleanUpCmd, { stdio: 'inherit' });
-    } else {
-        console.log("Skipping cleanup");
-        var stopCmd = `sudo incus stop ${incusRemote}:${vmName} --project ${incusProject}`;
-        console.log(`stopCmd: ${stopCmd}`);
-        execSync(stopCmd, { stdio: 'inherit' });
     }
 
 } catch (error) {
