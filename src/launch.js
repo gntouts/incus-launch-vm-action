@@ -57,14 +57,13 @@ function extractIP(output) {
             console.log(`non empty trimmed line: ${trimLine}`);
             if (trimLine.includes("inet") && trimLine.includes("global")) {
                 console.log(`line includes IP: ${trimLine}`);
-                console.log(`extracted IP: ${trimLine.split(":")[1]}`);
-            }
-            if (trimLine.includes("inet:") && trimLine.includes("global")) {
-                let temp = trimLine.split(" ")[1];
-                console.log(`extracted IP: ${temp}`);
-                temp = temp.split("/")[0];
-                console.log(`extracted IP: ${temp}`);
-                return temp;
+                trimLine=trimLine.split(":")[1];
+                console.log(`extracted IP: ${trimLine}`);
+                trimLine = trimLine.split(":")[1];
+                console.log(`extracted IP: ${trimLine}`);
+                trimLine = trimLine.split("/")[0].trim();
+                console.log(`extracted IP: ${trimLine}`);
+                return trimLine;
             }
         }
     }
