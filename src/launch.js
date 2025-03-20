@@ -51,8 +51,14 @@ function extractIP(output) {
     console.log(`received output: ${output}`);
     for (const line of output.split(os.EOL)) {
         let trimLine = line.trim();
-        console.log(`trimmed line: ${trimLine}`);
+        trimLine = trimLine.toString()
+        trimLine = `${trimLine}`;
         if (trimLine !== "") {
+            console.log(`non empty trimmed line: ${trimLine}`);
+            if (trimLine.includes("inet") && trimLine.includes("global")) {
+                console.log(`line includes IP: ${trimLine}`);
+                console.log(`extracted IP: ${trimLine.split(":")[1]}`);
+            }
             if (trimLine.includes("inet:") && trimLine.includes("global")) {
                 let temp = trimLine.split(" ")[1];
                 console.log(`extracted IP: ${temp}`);
