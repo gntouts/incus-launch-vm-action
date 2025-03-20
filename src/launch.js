@@ -40,9 +40,7 @@ try {
     execSync(spawnCmd, { stdio: 'inherit' });
 
     // get VM IP
-    var getIpCmd = `sudo incus info ${incusRemote}:${vmName} --project ${incusProject} `;
-    // getIpCmd += `| awk '/inet: / {print $2}' | grep -v  "127.0.0.1" | cut -d'/' -f1"`;
-    console.log(`getIpCmd: ${getIpCmd}`);
+
     var ip = execSync(getIpCmd, { stdio: 'pipe' }).toString()
     for (const line of ip.split(os.EOL)) {
         if (line.trim() !== "") {
@@ -53,19 +51,7 @@ try {
             }
         }
     }
-    const retries = 30;
-    var retry = 0;
-    while (ip === "") {
-        console.log("Waiting for VM to be ready...");
-        ip = execSync(getIpCmd, { stdio: 'pipe' }).toString().trim();
-        ip = extractIP(ip);
-        retry++;
-        if (retry === retries) {
-            throw new Error("Failed to get IP address");
-        }
-        sleep(4000);
-    }
-    // set IP as output
+    var ip = getIP(30);
     setOutput('incus_vm_ip', ip);
     console.log(`VM IP: ${ip}`);
 } catch (error) {
@@ -73,14 +59,38 @@ try {
 }
 
 function extractIP(output) {
+    console.log(`received output: ${output}`);
     for (const line of output.split(os.EOL)) {
-        if (line.trim() !== "") {
-            let temp = line.trim();
-            if (temp.includes("inet:") && temp.includes("global")) {
-                temp = temp.split(" ")[1];
-                return temp.split("/")[0];
+        let trimLine = line.trim();
+        console.log(`trimmed line: ${trimLine}`);
+        if (trimLine !== "") {
+            if (trimLine.includes("inet:") && trimLine.includes("global")) {
+                let temp = trimLine.split(" ")[1];
+                console.log(`extracted IP: ${temp}`);
+                temp = temp.split("/")[0];
+                console.log(`extracted IP: ${temp}`);
+                return temp;
             }
         }
     }
     return "";
+}
+
+function getIP(maxRetries) {
+    const retries = maxRetries;
+    var retry = 0;
+    var ip = "";
+    var getIpCmd = `sudo incus info ${incusRemote}:${vmName} --project ${incusProject} `;
+    console.log(`getIpCmd: ${getIpCmd}`);
+    while (ip === "") {
+        console.log("Waiting for VM to be ready...");
+        ip = execSync(getIpCmd, { stdio: 'pipe' }).toString();
+        ip = extractIP(ip);
+        retry++;
+        if (retry === retries) {
+            throw new Error("Failed to get IP address");
+        }
+        sleep(4000);
+    }
+    return ip;
 }
